@@ -17,7 +17,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                    bat "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
                     echo "Docker image built: ${IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
@@ -26,7 +26,7 @@ pipeline {
         stage('Run Tests in Docker') {
             steps {
                 script {
-                    sh "docker run --rm ${IMAGE_NAME}:${IMAGE_TAG} npm run test"
+                    bat "docker run --rm ${IMAGE_NAME}:${IMAGE_TAG} npm run test"
                     echo 'Tests passed successfully'
                 }
             }
@@ -35,7 +35,7 @@ pipeline {
         stage('Tag Latest Image') {
             steps {
                 script {
-                    sh "docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest"
+                    bat "docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest"
                     echo 'Tagged image as latest'
                 }
             }
@@ -45,7 +45,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up Docker images...'
-            sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG} || true"
+            bat "docker rmi ${IMAGE_NAME}:${IMAGE_TAG} || true"
             cleanWs()
         }
         
